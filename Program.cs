@@ -11,13 +11,31 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
+
+
+builder.Host.UseDefaultServiceProvider(options =>
+{
+    options.ValidateScopes = true;
+    options.ValidateOnBuild = true;
+});
+
+builder.Services.AddSingleton<EnrollmentWorker>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+
+
+builder.Services
+    .AddOptions<PaymentOptions>()
+    .BindConfiguration("Payments")
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 // builder.Services.AddControllers();
 
 var app = builder.Build();
 
 app.UseMiddleware<RequestLoggingMiddleware>();
 
-app.UseExceptionHandler();
+// app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
@@ -35,6 +53,21 @@ app.MapGet("/api/assessments/results", () => Results.Ok(new
     }))
 .RequireAuthorization();
 
+app.MapGet("/api/enrollments/worker-smoke",
+    (EnrollmentWorker worker) =>
+{
+    worker.ProcessBatch();
+
+    return Results.Ok("processed");
+});
+
+app.MapGet("/test-enroll", async (IEnrollmentService service) =>
+{
+    await service.EnrollAsync("S-001", "CS-101");
+    await service.EnrollAsync("S-001", "CS-101");
+
+    return Results.Ok();
+});
 // app.UseHttpsRedirection();
 // app.MapControllers();
 
