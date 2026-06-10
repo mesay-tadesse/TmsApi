@@ -15,6 +15,12 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+app.UseMiddleware<RequestLoggingMiddleware>();
+
+app.UseExceptionHandler();
+
+app.UseHttpsRedirection();
+
 app.UseRouting();
 
 app.UseAuthentication();
