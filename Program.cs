@@ -30,12 +30,15 @@ builder.Services
     .ValidateOnStart();
 
 builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
 app.UseMiddleware<RequestLoggingMiddleware>();
 
-// app.UseExceptionHandler();
+app.UseExceptionHandler();
+
+app.UseStatusCodePages();
 
 app.UseHttpsRedirection();
 
@@ -61,12 +64,10 @@ app.MapGet("/api/enrollments/worker-smoke",
     return Results.Ok("processed");
 });
 
-app.MapGet("/test-enroll", async (IEnrollmentService service) =>
+app.MapGet("/api/error", () =>
 {
-    await service.EnrollAsync("S-001", "CS-101");
-    await service.EnrollAsync("S-001", "CS-101");
-
-    return Results.Ok();
+    throw new TmsDatabaseException(
+        "Simulated database failure for ProblemDetails testing");
 });
 // app.UseHttpsRedirection();
 app.MapControllers();

@@ -35,3 +35,7 @@
 
 #return HTTP/1.1 404 Not Found
 # DELETE {{TmsApi_HostAddress}}/api/enrollments/{id}
+
+#M-4_S-3 : Ex:6 
+#  return: "type", "title": "An error occurred while processing your request.", "status": 500
+# GET {{TmsApi_HostAddress}}/api/error
