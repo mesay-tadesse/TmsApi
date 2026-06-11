@@ -10,9 +10,28 @@
 # Accept: application/json
 
 
-# With Header:  HTTP/1.1 200 OK,  with JSON Data
-GET {{TmsApi_HostAddress}}/api/assessments/results/
-Accept: application/json
-X-Training-User: Mesay
+# # With Header:  HTTP/1.1 200 OK,  with JSON Data
+# GET {{TmsApi_HostAddress}}/api/assessments/results/
+# Accept: application/json
+# X-Training-User: Mesay
 
- 
+
+#return HTTP/1.1 200 OK  , []
+# GET {{TmsApi_HostAddress}}/api/enrollments
+
+#return HTTP/1.1 404 Not Found
+# GET {{TmsApi_HostAddress}}/api/enrollments/{id}
+
+
+### Create Enrollment
+##return HTTP/1.1 201 Created
+# return Location: http://localhost:5079/api/enrollments/ce470a1e
+# POST {{TmsApi_HostAddress}}/api/enrollments
+# Content-Type: application/json
+# {
+#   "studentId": "S-001",
+#   "courseCode": "CS-101"
+# }
+
+#return HTTP/1.1 404 Not Found
+# DELETE {{TmsApi_HostAddress}}/api/enrollments/{id}

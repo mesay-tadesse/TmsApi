@@ -29,7 +29,7 @@ builder.Services
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
-// builder.Services.AddControllers();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -69,6 +69,6 @@ app.MapGet("/test-enroll", async (IEnrollmentService service) =>
     return Results.Ok();
 });
 // app.UseHttpsRedirection();
-// app.MapControllers();
+app.MapControllers();
 
 app.Run();
