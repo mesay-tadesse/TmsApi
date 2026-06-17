@@ -22,7 +22,8 @@ builder.Host.UseDefaultServiceProvider(options =>
 
 builder.Services.AddSingleton<EnrollmentWorker>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
-
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ICourseService,CourseService>();
 
 builder.Services
     .AddOptions<PaymentOptions>()
@@ -54,6 +55,9 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+}
+else{
+    app.UseExceptionHandler();
 }
 
 app.MapGet("/api/assessments/results", () => Results.Ok(new
