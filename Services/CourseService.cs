@@ -1,3 +1,5 @@
+using TmsApi.Entities;
+
 public interface ICourseService
 {
     Task<Course> CreateAsync(string code, string title, int capacity);
@@ -28,7 +30,6 @@ public class CourseService : ICourseService
             Code = code,
             Title = title,
             Capacity = capacity,
-            EnrolledCount = 0
         };
 
         _store[code] = course;

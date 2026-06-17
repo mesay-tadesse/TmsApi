@@ -1,3 +1,5 @@
+using TmsApi.Entities;
+
 public interface IEnrollmentService
 {
     Task<EnrollmentRecord> EnrollAsync(string studentId, string courseCode);

@@ -1,9 +1,17 @@
 using Microsoft.AspNetCore.Authentication;
 using Scalar.AspNetCore;
+using Microsoft.EntityFrameworkCore;
+using TmsApi;
+using TmsApi.Data;
+using TmsApi.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
+builder.Services.AddDbContext<TmsDbContext>(
+    options => options.UseNpgsql(
+        builder.Configuration.GetConnectionString("TmsDatabase")));
+
 
 builder.Services
     .AddAuthentication("Training")

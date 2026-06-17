@@ -1,3 +1,5 @@
+using TmsApi.Entities;
+
 public interface IStudentService
 {
     Task<Student> CreateAsync(string name, int age, decimal gpa);
@@ -25,7 +27,7 @@ public class StudentService : IStudentService
         var id = Guid.NewGuid().ToString("N")[..6];
         var student = new Student
         {
-            Id = id,
+            RegistrationNumber = id,
             Name = name,
             Age = age,
             GPA = gpa
