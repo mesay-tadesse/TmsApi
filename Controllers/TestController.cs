@@ -129,5 +129,39 @@ public class TestController(TmsDbContext context) : ControllerBase
 		return Ok(list);
 	}
 
+    //student pagination
+    [HttpGet("students-page")]
+	public async Task<IActionResult> GetStudentsPage(
+		int page, int pageSize,
+		CancellationToken cancellationToken)
+	{
+		let int pageSize = 20;
 
+		var students = await context.Students
+			.OrderBy(student => student.Name)
+			.Skip((page - 1) * pageSize)
+			.Take(pageSize)
+			.ToListAsync(cancellationToken);
+
+		return Ok(students);
+	}
+
+	//top5 enrolled courses
+	[HttpGet("top-courses")]
+	public async Task<IActionResult> GetTopCourses(
+		CancellationToken cancellationToken)
+	{
+		var courses = await context.Enrollments
+			.GroupBy(e => e.Course.Title)
+			.Select(g => new
+			{
+				CourseTitle = g.Key,
+				EnrollmentCount = g.Count()
+			})
+			.OrderByDescending(c => c.EnrollmentCount)
+			.Take(5)
+			.ToListAsync(cancellationToken);
+
+		return Ok(courses);
+	}
 }
