@@ -1,4 +1,3 @@
-3
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TmsApi.Entities;
@@ -9,6 +8,11 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
 {
     public void Configure(EntityTypeBuilder<Student> builder)
     {
+
+        builder.Property<DateTime>("LastUpdated");
+        builder.Property(s => s.Version).IsRowVersion();
+        builder.HasQueryFilter(s => !s.IsDeleted);
+
         builder.HasKey(s => s.Id);
 
         builder.Property(s => s.RegistrationNumber)

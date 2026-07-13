@@ -135,7 +135,7 @@ public class TestController(TmsDbContext context) : ControllerBase
 		int page, int pageSize,
 		CancellationToken cancellationToken)
 	{
-		let int pageSize = 20;
+		pageSize = 20;
 
 		var students = await context.Students
 			.OrderBy(student => student.Name)

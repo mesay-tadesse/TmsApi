@@ -51,5 +51,52 @@ public class ReportsController : ControllerBase
             }
 
         return Ok(report);
-    } 
+    }
+    
+    [HttpGet("include")]
+    public async Task<IActionResult> Include(CancellationToken cancellationToken)
+    {
+        var students = await db.Students
+            .AsNoTracking()
+            .Include(s => s.Enrollments)
+            .ToListAsync(cancellationToken);
+
+        var result = students.Select(s => new
+        {
+            s.Name,
+            EnrollmentCount = s.Enrollments.Count
+        });
+
+        return Ok(result);
+    }
+
+    [HttpPost("softdelete")]
+    public async Task<IActionResult> SoftDelete(CancellationToken cancellationToken)
+    {
+        var cutoff = DateTime.UtcNow;
+        await db.Students 
+            .Where(e => e.IsActive == true)
+            .ExecuteUpdateAsync(s => s.SetProperty( e => e.IsDeleted, true), cancellationToken);
+        return Ok(); 
+    }
+
+    [HttpPost("ISdeleted")]
+    public async Task<IActionResult> Isdeleted(CancellationToken cancellationToken)
+    {
+        var allStudents = await db.Students
+             .IgnoreQueryFilters()
+             .ToListAsync();
+
+         return Ok(allStudents);
+    }     
+    
+    [HttpPost("archive")]
+    public async Task<IActionResult> Archive(CancellationToken cancellationToken)
+    {
+        var cutoff = DateTime.UtcNow;
+        await db.Enrollments 
+            .Where(e => e.EnrolledAt < cutoff)
+            .ExecuteUpdateAsync(s => s.SetProperty( e => e.IsArchived, true), cancellationToken);
+        return Ok();
+    }  
 }
