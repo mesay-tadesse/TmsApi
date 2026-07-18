@@ -32,7 +32,7 @@ builder.Host.UseDefaultServiceProvider(options =>
     options.ValidateOnBuild = true;
 });
 
-builder.Services.AddSingleton<EnrollmentWorker>();
+// builder.Services.AddSingleton<EnrollmentWorker>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ICourseService,CourseService>();
@@ -80,19 +80,19 @@ app.MapGet("/api/assessments/results", () => Results.Ok(new
     }))
 .RequireAuthorization();
 
-app.MapGet("/api/enrollments/worker-smoke",
-    (EnrollmentWorker worker) =>
-{
-    worker.ProcessBatch();
+// app.MapGet("/api/enrollments/worker-smoke",
+//     (EnrollmentWorker worker) =>
+// {
+//     worker.ProcessBatch();
 
-    return Results.Ok("processed");
-});
+//     return Results.Ok("processed");
+// });
 
-app.MapGet("/api/error", () =>
-{
-    throw new TmsDatabaseException(
-        "Simulated database failure for ProblemDetails testing");
-});
+// app.MapGet("/api/error", () =>
+// {
+//     throw new TmsDatabaseException(
+//         "Simulated database failure for ProblemDetails testing");
+// });
 // app.UseHttpsRedirection();
 app.MapControllers();
 
