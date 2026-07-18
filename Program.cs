@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using TmsApi;
 using TmsApi.Data;
 using TmsApi.Entities;
+using TmsApi.Dtos;
+using TmsApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
