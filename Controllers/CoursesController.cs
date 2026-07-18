@@ -42,4 +42,12 @@ public class CoursesController(
             new { id = result.Id}, 
             result);
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetCourses(
+        [FromQuery] PagedRequest request, CancellationToken ct)
+    {
+        var result = await courseService.GetCoursesAsync(request, ct);
+        return Ok(result);
+    }
 }

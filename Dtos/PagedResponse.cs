@@ -1,4 +1,4 @@
-namespace Tms.Api.Dtos;
+namespace TmsApi.Dtos;
 public record PagedResponse<T>
 {
     public required IReadOnlyList<T> Items { get; init; }

@@ -67,6 +67,13 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+    
+    using var scope = app.Services.CreateScope();
+
+    var context = scope.ServiceProvider
+        .GetRequiredService<TmsDbContext>();
+
+    await DataSeeder.SeedAsync(context);
 }
 else{
     app.UseExceptionHandler();
