@@ -6,6 +6,7 @@ using TmsApi.Data;
 using TmsApi.Entities;
 using TmsApi.Dtos;
 using TmsApi.Services;
+using TmsApi.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,12 @@ builder.Services
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
-builder.Services.AddControllers();
+// builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<AuditLogFilter>();
+});
+
 builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 
