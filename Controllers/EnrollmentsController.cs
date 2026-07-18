@@ -52,4 +52,16 @@ public class EnrollmentsController(
             },
             enrollment);
     }
+
+    [HttpGet(Name = "ListCourseEnrollments")]
+    public async Task<IActionResult> GetEnrollments(int courseId, CancellationToken ct)
+    {
+        var course = await courseService.GetByIdAsync(courseId, ct);
+        if (course is null)
+        {
+            return NotFound();
+        } 
+        var enrollments = await enrollmentService.GetByCourseAsync(courseId, ct);
+        return Ok(enrollments);  
+    }
 }
