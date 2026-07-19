@@ -39,3 +39,8 @@
 #M-4_S-3 : Ex:6 
 #  return: "type", "title": "An error occurred while processing your request.", "status": 500
 # GET {{TmsApi_HostAddress}}/api/error
+
+# GET {{TmsApi_HostAddress}}/api/v1/courses/
+
+
+GET {{TmsApi_HostAddress}}/api/v2/courses/
