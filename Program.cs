@@ -15,6 +15,7 @@ using TmsApi.ExceptionHandlers;
 using TmsApi.Application.Behaviors;
 using TmsApi.Application.Enrollments.Commands;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 
