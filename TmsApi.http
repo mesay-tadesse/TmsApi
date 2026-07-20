@@ -43,4 +43,40 @@
 # GET {{TmsApi_HostAddress}}/api/v1/courses/
 
 
-GET {{TmsApi_HostAddress}}/api/v2/courses/
+# GET {{TmsApi_HostAddress}}/api/v2/courses/
+
+### Valid enrollment (201 Created)
+# POST {{TmsApi_HostAddress}}/api/v2/enrollments
+# Content-Type: application/json
+
+# {
+#   "studentId": 1,
+#   "courseCode": "CSE-101"
+# }
+
+# ### Invalid course-code (400 Bad Request)
+# POST {{TmsApi_HostAddress}}/api/v2/enrollments
+# Content-Type: application/json
+
+# {
+#   "studentId": 1,
+#   "courseCode": "invalid"
+# }
+
+### Course not found (404 Not Found)
+# POST {{TmsApi_HostAddress}}/api/v2/enrollments
+# Content-Type: application/json
+
+# {
+#   "studentId": 1,
+#   "courseCode": "ZZZ-999"
+# }
+
+### Duplicate enrollment (409 Conflict)
+# POST {{TmsApi_HostAddress}}/api/v2/enrollments
+# Content-Type: application/json
+
+# {
+#   "studentId": 1,
+#   "courseCode": "CSE-101"
+# }

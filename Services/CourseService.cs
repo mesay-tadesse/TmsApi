@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TmsApi.Data;
 using TmsApi.Dtos;
 using TmsApi.Entities;
-
+// using TmsApi.Application.Interfaces;
 namespace TmsApi.Services;
 
 public class CourseService(
@@ -99,5 +99,13 @@ public class CourseService(
             PageSize = request.PageSize
         };
     }
-
+ 
+    public async Task<Course?> GetByCodeAsync(
+        string code,
+        CancellationToken ct)
+    {
+        return await context.Courses
+            .Include(c => c.Enrollments)
+            .FirstOrDefaultAsync(c => c.Code == code, ct);
+    }
 }

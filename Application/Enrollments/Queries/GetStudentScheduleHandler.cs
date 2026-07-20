@@ -1,5 +1,5 @@
 using MediatR;
-using TmsApi.Application.Interfaces;
+using TmsApi.Services;
 
 namespace TmsApi.Application.Enrollments.Queries;
 
