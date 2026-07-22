@@ -110,4 +110,29 @@ public class CourseService(
             .Include(c => c.Enrollments)
             .FirstOrDefaultAsync(c => c.Code == code, ct);
     }
+
+    public async Task UpdateAsync(
+        UpdateCourseCommand command,
+        CancellationToken ct)
+    {
+        var course = await context.Courses
+            .FirstOrDefaultAsync(c => c.Code == command.Code, ct);
+
+        if (course is null)
+        {
+            throw new KeyNotFoundException($"Course '{command.Code}' was not found.");
+        }
+
+        course.Title = command.Title;
+
+        await context.SaveChangesAsync(ct);
+    }
+    
+    public async Task<List<Course>> GetAllAsync(
+        CancellationToken ct)
+    {
+        return await context.Courses
+            .AsNoTracking()
+            .ToListAsync(ct);
+    }
 }
