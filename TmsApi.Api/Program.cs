@@ -209,10 +209,21 @@ builder.Services.AddRateLimiter(options =>
 
 builder.Services.AddScoped<ICachedCourseService, CachedCourseService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+
+
 builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseCors("AllowAngular");
 
 app.UseMiddleware<RequestLoggingMiddleware>();
 
