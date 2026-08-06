@@ -227,11 +227,14 @@ builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<ITranscriptStatusStore, InMemoryTranscriptStatusStore>();
 builder.Services.AddHostedService<TranscriptWorker>();
-
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<ITranscriptNotificationService, SignalRTranscriptNotificationService>();
 
 var app = builder.Build();
 
 app.UseCors("AllowAngular");
+
+app.MapHub<TmsHub>("/hubs/tms");
 
 app.UseMiddleware<RequestLoggingMiddleware>();
 

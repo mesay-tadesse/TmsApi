@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using tmsapi.application.transcripts;
 using TmsApi.Application.Notifications;
 using TmsApi.Infrastructure.Transcripts;
+
 namespace TmsApi.Infrastructure.Workers;
 
 public class TranscriptWorker(
@@ -21,14 +22,14 @@ public class TranscriptWorker(
         await foreach (var request in channel.Reader.ReadAllAsync(ct))
         {
             var reportId = request.ReportId!;
-                ?? throw new InvalidOperationException("ReportId must be set before queueing.");
+                // ?? throw new InvalidOperationException("ReportId must be set before queueing.");
             try
                 {
                     await statusStore.MarkProcessingAsync(reportId, ct);
                     
                     logger.LogInformation("Generating transcript {ReportId} for student {StudentId}", reportId, request.StudentId);
                     
-                    using var scope = scopeFactory.CreateScope();
+                    // using var scope = scopeFactory.CreateScope();
                     
                     // Real production: pull the EF context, render PDF,save to blob storage.
 
@@ -38,19 +39,21 @@ public class TranscriptWorker(
                     
                     await statusStore.MarkReadyAsync(reportId, downloadUrl, ct);
 
-                    logger.LogInformation("Transcript ready: {ReportId}",reportId);
+                    await notificationService.NotifyTranscriptReadyAsync(request.StudentId, reportId, downloadUrl);
+
+                    logger.LogInformation("Transcript ready, notification sent: {ReportId}for student {StudentId}",reportId, request.StudentId);
 
             }
 
-            catch(OperationCanceledException) when (ct.IsCancellationRequested)
-            {
-                logger.LogWarning("Worker shutdown transcript {ReportId} did not complete", reportId);
-                throw;                
-            }
+            // catch(OperationCanceledException) when (ct.IsCancellationRequested)
+            // {
+            //     logger.LogWarning("Worker shutdown transcript {ReportId} did not complete", reportId);
+            //     throw;                
+            // }
 
             catch (Exception ex)
             {
-                logger.LogError(ex, "Failed to generate transcript {ReportI}", reportId);
+                logger.LogError(ex, "Transcript generation failed: {ReportI}", reportId);
                 await statusStore.MarkFailedAsync(reportId, ex.Message, CancellationToken.None);
             }
         }
