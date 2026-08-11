@@ -391,5 +391,6 @@ app.MapHealthChecks("/health/ready").DisableRateLimiting();
 //         context.SaveChanges();
 //     }
 // }
-   
+app.MapHub<TmsHub>("/hubs/tms").RequireCors("TmsClient");
+
 app.Run();
