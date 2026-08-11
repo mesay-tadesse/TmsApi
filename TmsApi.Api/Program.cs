@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using TmsApi.Api.RateLimiting;
 using System.Threading.Channels;
+using Microsoft.AspNetCore.Antiforgery;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -249,11 +250,32 @@ builder.Services.AddCors(options =>
     });
 });
  
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-XSRF-TOKEN";
+});
 var app = builder.Build();
 
 // app.UseCors("AllowAngular");
 app.UseCors("TmsClient");
 
+app.Use(async (context, next) =>
+{
+    if (context.User.Identity?.IsAuthenticated == true || context.Request.Cookies.ContainsKey("tms_auth"))
+    {
+        var antiforgery = context.RequestServices.GetRequiredService<IAntiforgery>();
+        var tokens = antiforgery.GetAndStoreTokens(context);
+        
+        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken!, new CookieOptions
+        {
+            HttpOnly = false,
+            Secure = !builder.Environment.IsDevelopment(),
+            SameSite = SameSiteMode.Strict
+        });
+    }
+    
+    await next(context);
+});
 app.MapHub<TmsHub>("/hubs/tms");
 
 app.UseMiddleware<RequestLoggingMiddleware>();
