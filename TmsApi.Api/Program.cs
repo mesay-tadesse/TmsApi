@@ -230,9 +230,29 @@ builder.Services.AddHostedService<TranscriptWorker>();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<ITranscriptNotificationService, SignalRTranscriptNotificationService>();
 
+
+var allowedOrigins = builder.Configuration
+    .GetSection("AllowedOrigins").Get<string[]>()
+    ?? ["http://localhost:4200"];
+
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("TmsClient", policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+    });
+});
+ 
 var app = builder.Build();
 
-app.UseCors("AllowAngular");
+// app.UseCors("AllowAngular");
+app.UseCors("TmsClient");
 
 app.MapHub<TmsHub>("/hubs/tms");
 
