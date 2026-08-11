@@ -14,6 +14,7 @@ public class EnrollmentsController(IMediator mediator) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Enroll(
         EnrollStudentCommand command,
+        IHubContext<TmsHub, ITmsHubClient> hubContext,
         CancellationToken ct)
     {
         var result = await mediator.Send(command, ct);
@@ -47,5 +48,13 @@ public class EnrollmentsController(IMediator mediator) : ControllerBase
         var schedule = await mediator.Send(
             new GetStudentScheduleQuery(studentId), ct);
         return Ok(schedule);
+    }
+    
+    [HttpPost("{id}/approve")]
+    public async Task<IActionResult> Approve(string id, CancellationToken ct)
+    {
+        await hubContext.Clients.All
+        .ReceiveEnrollmentStatusUpdated(id, "Approved");
+    return NoContent();
     }
 }
