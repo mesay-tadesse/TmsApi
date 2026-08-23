@@ -1,6 +1,6 @@
 using TmsApi.Application.Transcripts;
 
-namespace TmsApi.Infrastructure.Transcriptss;
+namespace TmsApi.Infrastructure.Transcripts;
 
 public interface ITranscriptStatusStore
 {
@@ -8,7 +8,7 @@ public interface ITranscriptStatusStore
 	Task MarkProcessingAsync(string reportId, CancellationToken ct);
 	Task MarkReadyAsync(string reportId, string downloadUrl, CancellationToken ct);
 	Task MarkFailedAsync(string reportId, string error, CancellationToken ct);
-	Task<TranscriptStatus?> GetAsync(string reportId, CancellationTokenct);
+	Task<TranscriptStatus?> GetAsync(string reportId, CancellationToken ct);
 
 	// Idempotency
 	Task<string?> GetReportIdForIdempotencyKeyAsync(string idempotencyKey, CancellationToken ct);

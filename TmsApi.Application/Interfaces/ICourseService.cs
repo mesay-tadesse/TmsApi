@@ -1,5 +1,7 @@
 using TmsApi.Domain.Entities;
 using TmsApi.Application.DTOs;
+using TmsApi.Application.Enrollments.Commands;
+
 namespace TmsApi.Application.Interfaces;
 
 public interface ICourseService
@@ -10,5 +12,7 @@ public interface ICourseService
     Task<PagedResponse<CourseResponseDto>> GetCoursesAsync(PagedRequest request, CancellationToken ct);
 
     Task<Course?> GetByCodeAsync(string code, CancellationToken ct);
-    Task UpdateAsync(Course course);
+    // Task UpdateAsync(Course course);
+    Task UpdateAsync(UpdateCourseCommand command, CancellationToken ct);
+    Task<List<Course>> GetAllAsync(CancellationToken ct);
 }

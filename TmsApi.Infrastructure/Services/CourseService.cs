@@ -5,7 +5,7 @@ using TmsApi.Application.DTOs;
 using TmsApi.Domain.Entities;
 using TmsApi.Application.Interfaces;
 using Microsoft.Extensions.Logging;
-
+using TmsApi.Application.Enrollments.Commands;
 namespace TmsApi.Infrastructure.Services;
 
 public class CourseService(

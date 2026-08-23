@@ -21,9 +21,28 @@ using Microsoft.AspNetCore.RateLimiting;
 using TmsApi.Api.RateLimiting;
 using System.Threading.Channels;
 using Microsoft.AspNetCore.Antiforgery;
-
+using Microsoft.AspNetCore.Identity;
+using TmsApi.Infrastructure.Identity;
+using TmsApi.Infrastructure.Transcripts;
+using TmsApi.Application.Transcripts; 
+using TmsApi.Api.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddIdentityCore<TmsUser>(options =>
+{
+    // Enterprise Password Policy
+    options.Password.RequiredLength = 12;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequireNonAlphanumeric = true;
+
+    // Brute-Force Lockout Protection
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    options.Lockout.AllowedForNewUsers = true;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<TmsDbContext>();
 
 builder.Services.AddOpenApi("v1", options =>
 {

@@ -2,7 +2,7 @@ using System.Threading.Channels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using tmsapi.application.transcripts;
+using TmsApi.Application.Transcripts;
 using TmsApi.Application.Notifications;
 using TmsApi.Infrastructure.Transcripts;
 

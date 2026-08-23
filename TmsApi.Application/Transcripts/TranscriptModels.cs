@@ -1,4 +1,4 @@
-namespace tmsapi.application.transcripts;
+namespace TmsApi.Application.Transcripts;
 
 public enum TranscriptState { Queued, Processing, Ready, Failed }
 

@@ -2,10 +2,10 @@ using System.Threading.Channels;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
-using tmsapi.application.transcripts;
+using TmsApi.Application.Transcripts;
 using TmsApi.Infrastructure.Transcripts;
-// using MediatR;
-
+using MediatR;
+using TmsApi.Application.Enrollments.Queries;
 namespace TmsApi.Api.Controllers.V2;
 
 [ApiController]

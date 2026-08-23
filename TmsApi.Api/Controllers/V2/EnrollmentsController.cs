@@ -3,15 +3,18 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TmsApi.Application.Enrollments.Commands;
 using TmsApi.Application.Enrollments.Queries;
+using TmsApi.Application.Hubs;
+using TmsApi.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
-namespace TmsApi.Controllers.V2;
+namespace TmsApi.Controllers.V2; 
 
 [ApiController]
 [Route("api/v{version:apiVersion}/enrollments")]
 [ApiVersion("2.0")]
 public class EnrollmentsController(IMediator mediator) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost] 
     public async Task<IActionResult> Enroll(
         EnrollStudentCommand command,
         IHubContext<TmsHub, ITmsHubClient> hubContext,
