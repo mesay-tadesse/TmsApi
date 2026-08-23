@@ -39,4 +39,23 @@ public class AuthController : ControllerBase
 
         return Unauthorized(new { detail = "Session expired or missing authentication cookie." });
     }
+        
+    [HttpGet("hash")]
+    public IActionResult TestHash()
+    {
+        var service = new CryptoDemoService();
+        string hash1 = service.HashUserPassword("Password123!");
+        string hash2 = service.HashUserPassword("Password123!");
+
+        bool match1 = service.VerifyUserPassword("Password123!", hash1);
+        bool match2 = service.VerifyUserPassword("Password123!", hash2);
+
+        return Ok(new
+        {
+            hash1,
+            hash2,
+            match1,
+            match2
+        });
+    }
 }
